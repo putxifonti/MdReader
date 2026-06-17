@@ -268,3 +268,15 @@ _Esta sección se actualiza a lo largo del desarrollo. Recoge correcciones, pref
 
 <!-- Formato: - [Fase N] Descripción de la lección -->
 
+- [Fase 0] El binario de Electron no se descarga automáticamente en algunos entornos Windows. Hay que ejecutar `node node_modules/electron/install.js` manualmente y, si falla, extraer el ZIP de la caché (`%LOCALAPPDATA%\electron\Cache`) con `Expand-Archive` de PowerShell.
+
+- [Fase 0] PowerShell's `Set-Content -Encoding utf8` escribe BOM (U+FEFF) al inicio del fichero. Para `path.txt` de Electron esto rompe la ruta. Usar siempre `[System.IO.File]::WriteAllText(path, content)` para escribir ficheros sin BOM desde PowerShell.
+
+- [Fase 2] `window.confirm()` en Electron rompe el foco del renderer de forma permanente: después de cerrar el diálogo, ni clicando en el editor se recupera el foco. **Nunca usar `window.confirm()` en Electron.** Usar siempre `dialog.showMessageBox()` del proceso principal vía IPC (`ipcMain.handle` + `ipcRenderer.invoke`).
+
+- [Fase 2] Los diálogos nativos de fichero (`showOpenDialog`, `showSaveDialog`) también roban el foco de la ventana. Después de cada `await api.openFile()` o `await api.saveFileAs()` hay que llamar `setTimeout(() => view.focus(), 100)` para restaurarlo.
+
+- [Fase 2] Cuando se abre un fichero reutilizando el tab activo (sin cambiar `tabId`), el `useEffect([tabId])` del Editor no se re-ejecuta y el EditorView no actualiza su contenido aunque el estado de React sí cambie. Solución: exponer `setContent(content)` vía `useImperativeHandle` y llamarlo explícitamente desde `doOpen`.
+
+- [Fase 2] `addTab()` puede retornar el ID del nuevo tab de forma síncrona porque el ID se genera con `crypto.randomUUID()` antes de llamar a `setState`. Las actualizaciones funcionales de React se aplican en secuencia, así que `updateTab(newId, updates)` llamado justo después encuentra el tab recién creado en el estado final del batch.
+
