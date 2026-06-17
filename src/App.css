@@ -33,6 +33,46 @@
   align-items: stretch;
 }
 
+.toolbar__sep {
+  width: 1px;
+  background: var(--tab-border);
+  margin: 4px 4px;
+  flex-shrink: 0;
+}
+
+.toolbar__group {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  padding: 0 4px;
+}
+
+.toolbar__zoom-label {
+  font-size: 11px;
+  color: var(--muted);
+  min-width: 28px;
+  text-align: center;
+  user-select: none;
+}
+
+.tb-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 5px;
+  font-size: 12px;
+  border-radius: 2px;
+  color: var(--text);
+  min-width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.tb-btn:hover { background: #d8d8d8; }
+
 .menu-root {
   position: relative;
 }

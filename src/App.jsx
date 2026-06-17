@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { undo, deleteCharForward } from '@codemirror/commands'
+import { applyFormat } from './utils/format'
 import { useTabs } from './hooks/useTabs'
 import Toolbar from './components/Toolbar'
 import TabBar from './components/TabBar'
@@ -16,6 +17,7 @@ function App() {
   const { tabs, activeTabId, activeTab, setActiveTabId, addTab, updateContent, updateTab, closeTab } = useTabs()
   const [cursor, setCursor] = useState({ line: 1, col: 1, chars: 0 })
   const [findState, setFindState] = useState({ open: false, mode: 'find' })
+  const [fontSize, setFontSize] = useState(14)
   const editorRef = useRef(null)
 
   function getView() { return editorRef.current?.getView() }
@@ -124,6 +126,13 @@ function App() {
       case 'delete':       if (view) deleteCharForward(view); break
       case 'find':         setFindState({ open: true, mode: 'find' }); break
       case 'replace':      setFindState({ open: true, mode: 'replace' }); break
+      case 'zoom-in':      setFontSize(s => Math.min(32, s + 2)); break
+      case 'zoom-out':     setFontSize(s => Math.max(10, s - 2)); break
+      case 'bold': case 'italic': case 'strikethrough':
+      case 'code-inline': case 'code-block': case 'link':
+      case 'h1': case 'h2': case 'h3':
+      case 'list': case 'numbered-list':
+        applyFormat(view, action); break
       case 'select-all':
         if (view) {
           view.dispatch({ selection: { anchor: 0, head: view.state.doc.length } })
@@ -144,6 +153,9 @@ function App() {
         if (e.key === 'N') { e.preventDefault(); handleAction('new-window') }
         if (e.key === 'S') { e.preventDefault(); handleAction('save-as') }
         if (e.key === 'W') { e.preventDefault(); handleAction('close-window') }
+        if (e.key === 'B') { e.preventDefault(); handleAction('bold') }
+        if (e.key === 'I') { e.preventDefault(); handleAction('italic') }
+        if (e.key === 'K') { e.preventDefault(); handleAction('link') }
       } else if (ctrl) {
         if (e.key === 'u' || e.key === 'U') { e.preventDefault(); handleAction('new-tab') }
         if (e.key === 'a' || e.key === 'A') { e.preventDefault(); handleAction('open') }
@@ -168,7 +180,7 @@ function App() {
 
   return (
     <div className="app">
-      <Toolbar onAction={handleAction} />
+      <Toolbar onAction={handleAction} fontSize={fontSize} />
       <TabBar
         tabs={tabs}
         activeTabId={activeTabId}
@@ -187,6 +199,7 @@ function App() {
         ref={editorRef}
         tabId={activeTabId}
         content={activeTab?.content ?? ''}
+        fontSize={fontSize}
         onChange={content => updateContent(activeTabId, content)}
         onCursorChange={setCursor}
       />

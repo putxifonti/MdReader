@@ -12,13 +12,13 @@ const editorKeymap = keymap.of([
 ])
 
 const editorTheme = EditorView.theme({
-  '&': { height: '100%', fontFamily: 'Consolas, monospace', fontSize: '14px' },
+  '&': { height: '100%' },
   '.cm-scroller': { overflow: 'auto', fontFamily: 'inherit' },
   '.cm-content': { minHeight: '100%', padding: '8px 12px', caretColor: 'auto' },
   '.cm-line': { padding: 0 },
 })
 
-const Editor = forwardRef(function Editor({ tabId, content, onChange, onCursorChange }, ref) {
+const Editor = forwardRef(function Editor({ tabId, content, onChange, onCursorChange, fontSize = 14 }, ref) {
   const containerRef = useRef(null)
   const viewRef = useRef(null)
   const onChangeRef = useRef(onChange)
@@ -70,7 +70,13 @@ const Editor = forwardRef(function Editor({ tabId, content, onChange, onCursorCh
     return () => { view.destroy(); viewRef.current = null }
   }, [tabId]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  return <div ref={containerRef} className="editor-container" />
+  return (
+    <div
+      ref={containerRef}
+      className="editor-container"
+      style={{ fontFamily: 'Consolas, monospace', fontSize: `${fontSize}px` }}
+    />
+  )
 })
 
 export default Editor

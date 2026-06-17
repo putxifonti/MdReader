@@ -27,6 +27,20 @@ const EDIT_MENU = [
   { label: 'Select All', shortcut: 'Ctrl+E', action: 'select-all' },
 ]
 
+const FORMAT_BUTTONS = [
+  { label: 'B',   action: 'bold',          title: 'Bold (Ctrl+Shift+B)',    style: { fontWeight: 'bold' } },
+  { label: 'I',   action: 'italic',        title: 'Italic (Ctrl+Shift+I)',  style: { fontStyle: 'italic' } },
+  { label: '~~',  action: 'strikethrough', title: 'Strikethrough',          style: { textDecoration: 'line-through' } },
+  { label: 'H1',  action: 'h1',            title: 'Heading 1' },
+  { label: 'H2',  action: 'h2',            title: 'Heading 2' },
+  { label: 'H3',  action: 'h3',            title: 'Heading 3' },
+  { label: '`',   action: 'code-inline',   title: 'Inline code' },
+  { label: '</>',  action: 'code-block',    title: 'Code block' },
+  { label: '🔗',  action: 'link',          title: 'Link (Ctrl+Shift+K)' },
+  { label: '–',   action: 'list',          title: 'Unordered list' },
+  { label: '1.',  action: 'numbered-list', title: 'Numbered list' },
+]
+
 function Menu({ items, onAction, onClose }) {
   return (
     <div className="menu-dropdown">
@@ -48,7 +62,7 @@ function Menu({ items, onAction, onClose }) {
   )
 }
 
-function Toolbar({ onAction }) {
+function Toolbar({ onAction, fontSize }) {
   const [openMenu, setOpenMenu] = useState(null)
   const ref = useRef(null)
 
@@ -64,33 +78,52 @@ function Toolbar({ onAction }) {
     setOpenMenu(prev => prev === name ? null : name)
   }
 
+  function act(action) {
+    setOpenMenu(null)
+    onAction(action)
+  }
+
   return (
     <div className="toolbar" ref={ref}>
+
+      {/* ── File / Edit menus ── */}
       <div className="toolbar__menus">
         <div className="menu-root">
-          <button
-            className={`menu-btn${openMenu === 'file' ? ' menu-btn--open' : ''}`}
-            onClick={() => toggle('file')}
-          >
-            File
-          </button>
-          {openMenu === 'file' && (
-            <Menu items={FILE_MENU} onAction={onAction} onClose={() => setOpenMenu(null)} />
-          )}
+          <button className={`menu-btn${openMenu === 'file' ? ' menu-btn--open' : ''}`} onClick={() => toggle('file')}>File</button>
+          {openMenu === 'file' && <Menu items={FILE_MENU} onAction={act} onClose={() => setOpenMenu(null)} />}
         </div>
-
         <div className="menu-root">
-          <button
-            className={`menu-btn${openMenu === 'edit' ? ' menu-btn--open' : ''}`}
-            onClick={() => toggle('edit')}
-          >
-            Edit
-          </button>
-          {openMenu === 'edit' && (
-            <Menu items={EDIT_MENU} onAction={onAction} onClose={() => setOpenMenu(null)} />
-          )}
+          <button className={`menu-btn${openMenu === 'edit' ? ' menu-btn--open' : ''}`} onClick={() => toggle('edit')}>Edit</button>
+          {openMenu === 'edit' && <Menu items={EDIT_MENU} onAction={act} onClose={() => setOpenMenu(null)} />}
         </div>
       </div>
+
+      <div className="toolbar__sep" />
+
+      {/* ── Zoom ── */}
+      <div className="toolbar__group">
+        <button className="tb-btn" onClick={() => onAction('zoom-out')} title="Decrease font size">A–</button>
+        <span className="toolbar__zoom-label">{fontSize}px</span>
+        <button className="tb-btn" onClick={() => onAction('zoom-in')}  title="Increase font size">A+</button>
+      </div>
+
+      <div className="toolbar__sep" />
+
+      {/* ── Format buttons ── */}
+      <div className="toolbar__group">
+        {FORMAT_BUTTONS.map(btn => (
+          <button
+            key={btn.action}
+            className="tb-btn"
+            style={btn.style}
+            title={btn.title}
+            onClick={() => onAction(btn.action)}
+          >
+            {btn.label}
+          </button>
+        ))}
+      </div>
+
     </div>
   )
 }
