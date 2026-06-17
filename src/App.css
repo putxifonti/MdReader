@@ -1,0 +1,131 @@
+:root {
+  --tab-h: 32px;
+  --footer-h: 24px;
+  --tab-bg: #e8e8e8;
+  --tab-active-bg: #ffffff;
+  --tab-border: #c0c0c0;
+  --toolbar-bg: #f0f0f0;
+  --text: #1a1a1a;
+  --muted: #666;
+}
+
+/* ── Layout ── */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Tab bar ── */
+.tab-bar {
+  display: flex;
+  align-items: stretch;
+  height: var(--tab-h);
+  background: var(--toolbar-bg);
+  border-bottom: 1px solid var(--tab-border);
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-shrink: 0;
+  scrollbar-width: none;
+}
+
+.tab-bar::-webkit-scrollbar { display: none; }
+
+.tab {
+  display: flex;
+  align-items: center;
+  padding: 0 6px 0 10px;
+  min-width: 80px;
+  max-width: 200px;
+  cursor: pointer;
+  border-right: 1px solid var(--tab-border);
+  background: var(--tab-bg);
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.tab:hover { background: #d8d8d8; }
+
+.tab--active {
+  background: var(--tab-active-bg);
+  color: var(--text);
+  border-bottom: 2px solid var(--tab-active-bg);
+  margin-bottom: -1px;
+}
+
+.tab__title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tab__dot {
+  font-size: 16px;
+  line-height: 1;
+  color: #888;
+  flex-shrink: 0;
+}
+
+.tab__close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 15px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-left: 2px;
+}
+
+.tab__close:hover { background: #c0c0c0; color: var(--text); }
+
+.tab-bar__new {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 18px;
+  padding: 0 12px;
+  align-self: stretch;
+  flex-shrink: 0;
+}
+
+.tab-bar__new:hover { background: #d8d8d8; }
+
+/* ── Editor ── */
+.editor-container {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.editor-container .cm-editor {
+  height: 100%;
+  outline: none;
+}
+
+/* ── Footer ── */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: var(--footer-h);
+  padding: 0 12px;
+  background: var(--toolbar-bg);
+  border-top: 1px solid var(--tab-border);
+  font-size: 11px;
+  color: var(--muted);
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.footer__credit { color: #999; }
