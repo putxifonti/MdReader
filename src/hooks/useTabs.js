@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 
-function createTab() {
+function createTab(overrides = {}) {
   return {
     id: crypto.randomUUID(),
     title: 'Untitled',
@@ -8,13 +8,14 @@ function createTab() {
     savedContent: '',
     filePath: null,
     fileType: 'txt',
+    ...overrides,
   }
 }
 
 export function useTabs() {
-  const initialTab = createTab()
-  const [tabs, setTabs] = useState([initialTab])
-  const [activeTabId, setActiveTabId] = useState(initialTab.id)
+  const initial = createTab()
+  const [tabs, setTabs] = useState([initial])
+  const [activeTabId, setActiveTabId] = useState(initial.id)
 
   const activeTab = tabs.find(t => t.id === activeTabId) ?? tabs[0]
 
@@ -22,10 +23,15 @@ export function useTabs() {
     const tab = createTab()
     setTabs(prev => [...prev, tab])
     setActiveTabId(tab.id)
+    return tab.id  // ID is generated before setState, safe to return synchronously
   }, [])
 
   const updateContent = useCallback((id, content) => {
     setTabs(prev => prev.map(t => t.id === id ? { ...t, content } : t))
+  }, [])
+
+  const updateTab = useCallback((id, updates) => {
+    setTabs(prev => prev.map(t => t.id === id ? { ...t, ...updates } : t))
   }, [])
 
   const closeTab = useCallback((id, currentTabs, currentActiveId) => {
@@ -40,12 +46,10 @@ export function useTabs() {
     }
 
     setTabs(remaining)
-
     if (currentActiveId === id) {
-      const newIdx = Math.min(idx, remaining.length - 1)
-      setActiveTabId(remaining[newIdx].id)
+      setActiveTabId(remaining[Math.min(idx, remaining.length - 1)].id)
     }
   }, [])
 
-  return { tabs, activeTabId, activeTab, setActiveTabId, addTab, updateContent, closeTab }
+  return { tabs, activeTabId, activeTab, setActiveTabId, addTab, updateContent, updateTab, closeTab }
 }

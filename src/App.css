@@ -17,6 +17,140 @@
   overflow: hidden;
 }
 
+/* ── Toolbar ── */
+.toolbar {
+  display: flex;
+  align-items: stretch;
+  height: 28px;
+  background: var(--toolbar-bg);
+  border-bottom: 1px solid var(--tab-border);
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.toolbar__menus {
+  display: flex;
+  align-items: stretch;
+}
+
+.menu-root {
+  position: relative;
+}
+
+.menu-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 10px;
+  height: 100%;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.menu-btn:hover,
+.menu-btn--open { background: #d8d8d8; }
+
+.menu-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  border: 1px solid #bbb;
+  box-shadow: 2px 4px 8px rgba(0,0,0,.15);
+  min-width: 200px;
+  z-index: 1000;
+  padding: 3px 0;
+}
+
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 16px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text);
+  gap: 24px;
+}
+
+.menu-item:hover { background: #e8e4f4; }
+
+.menu-shortcut {
+  color: #888;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.menu-separator {
+  height: 1px;
+  background: #ddd;
+  margin: 3px 0;
+}
+
+/* ── Find / Replace bar ── */
+.find-replace {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 5px 10px;
+  background: #f5f5f5;
+  border-bottom: 1px solid var(--tab-border);
+  flex-shrink: 0;
+  position: relative;
+}
+
+.find-replace__row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.find-replace__input {
+  font-size: 13px;
+  padding: 2px 6px;
+  border: 1px solid #bbb;
+  border-radius: 2px;
+  width: 220px;
+  outline: none;
+}
+
+.find-replace__input:focus { border-color: #888; }
+
+.fr-btn {
+  background: #e8e8e8;
+  border: 1px solid #bbb;
+  border-radius: 2px;
+  cursor: pointer;
+  padding: 2px 8px;
+  font-size: 12px;
+  color: var(--text);
+}
+
+.fr-btn:hover { background: #d8d8d8; }
+
+.find-replace__info {
+  font-size: 12px;
+  color: #666;
+  margin-left: 4px;
+}
+
+.find-replace__close {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #666;
+  padding: 2px 6px;
+  border-radius: 2px;
+  line-height: 1;
+}
+
+.find-replace__close:hover { background: #d8d8d8; }
+
 /* ── Tab bar ── */
 .tab-bar {
   display: flex;
