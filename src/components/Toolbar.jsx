@@ -62,9 +62,10 @@ function Menu({ items, onAction, onClose }) {
   )
 }
 
-function Toolbar({ onAction, fontSize }) {
+function Toolbar({ onAction, fontSize, mode = 'edit' }) {
   const [openMenu, setOpenMenu] = useState(null)
   const ref = useRef(null)
+  const isRead = mode === 'read'
 
   useEffect(() => {
     function handler(e) {
@@ -98,6 +99,17 @@ function Toolbar({ onAction, fontSize }) {
         </div>
       </div>
 
+      {/* ── Read / Edit toggle ── */}
+      <div className="toolbar__group">
+        <button
+          className={`tb-btn tb-btn--mode${isRead ? ' tb-btn--mode-active' : ''}`}
+          title={isRead ? 'Switch to Edit mode (Ctrl+Shift+P)' : 'Switch to Read mode (Ctrl+Shift+P)'}
+          onClick={() => onAction('toggle-mode')}
+        >
+          {isRead ? 'Edit' : 'Read'}
+        </button>
+      </div>
+
       <div className="toolbar__sep" />
 
       {/* ── Zoom ── */}
@@ -110,14 +122,15 @@ function Toolbar({ onAction, fontSize }) {
       <div className="toolbar__sep" />
 
       {/* ── Format buttons ── */}
-      <div className="toolbar__group">
+      <div className={`toolbar__group${isRead ? ' toolbar__group--disabled' : ''}`}>
         {FORMAT_BUTTONS.map(btn => (
           <button
             key={btn.action}
             className="tb-btn"
             style={btn.style}
             title={btn.title}
-            onClick={() => onAction(btn.action)}
+            disabled={isRead}
+            onClick={() => !isRead && onAction(btn.action)}
           >
             {btn.label}
           </button>
