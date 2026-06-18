@@ -6,10 +6,11 @@ A minimalist Markdown-aware text editor for Windows, inspired by Notepad. Fast, 
 
 ## Download
 
-| Version | Description |
-|---|---|
-| [**MdReader-Setup-0.1.0.exe**](https://github.com/putxifonti/MdReader/releases/download/v0.1.0/MdReader-Setup-0.1.0.exe) | Installer — installs MdReader on your PC with a desktop shortcut |
-| [**MdReader-0.1.0-portable.exe**](https://github.com/putxifonti/MdReader/releases/download/v0.1.0/MdReader-0.1.0-portable.exe) | Portable — run directly, no installation needed |
+**[⬇ MdReader-0.1.0-windows.zip](https://github.com/putxifonti/MdReader/releases/download/v0.1.0/MdReader-0.1.0-windows.zip)**
+
+The zip contains two files:
+- **`MdReader Setup 0.1.0.exe`** — Installer. Installs MdReader with a desktop shortcut and Start Menu entry.
+- **`MdReader-0.1.0-portable.exe`** — Portable. Run directly without installing.
 
 > **Note:** Windows may show a SmartScreen warning ("Windows protected your PC") because the app is not signed with a paid certificate. Click **More info → Run anyway** to proceed.
 
