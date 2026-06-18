@@ -6,6 +6,7 @@ import Toolbar from './components/Toolbar'
 import TabBar from './components/TabBar'
 import FindReplace from './components/FindReplace'
 import Editor from './components/Editor'
+import Preview from './components/Preview'
 import Footer from './components/Footer'
 import './App.css'
 
@@ -18,6 +19,7 @@ function App() {
   const [cursor, setCursor] = useState({ line: 1, col: 1, chars: 0 })
   const [findState, setFindState] = useState({ open: false, mode: 'find' })
   const [fontSize, setFontSize] = useState(14)
+  const [mode, setMode] = useState('edit')
   const editorRef = useRef(null)
 
   function getView() { return editorRef.current?.getView() }
@@ -126,6 +128,7 @@ function App() {
       case 'delete':       if (view) deleteCharForward(view); break
       case 'find':         setFindState({ open: true, mode: 'find' }); break
       case 'replace':      setFindState({ open: true, mode: 'replace' }); break
+      case 'toggle-mode':  setMode(m => m === 'edit' ? 'read' : 'edit'); break
       case 'zoom-in':      setFontSize(s => Math.min(32, s + 2)); break
       case 'zoom-out':     setFontSize(s => Math.max(10, s - 2)); break
       case 'bold': case 'italic': case 'strikethrough':
@@ -156,6 +159,7 @@ function App() {
         if (e.key === 'B') { e.preventDefault(); handleAction('bold') }
         if (e.key === 'I') { e.preventDefault(); handleAction('italic') }
         if (e.key === 'K') { e.preventDefault(); handleAction('link') }
+        if (e.key === 'P') { e.preventDefault(); handleAction('toggle-mode') }
       } else if (ctrl) {
         if (e.key === 'u' || e.key === 'U') { e.preventDefault(); handleAction('new-tab') }
         if (e.key === 'a' || e.key === 'A') { e.preventDefault(); handleAction('open') }
@@ -180,7 +184,7 @@ function App() {
 
   return (
     <div className="app">
-      <Toolbar onAction={handleAction} fontSize={fontSize} />
+      <Toolbar onAction={handleAction} fontSize={fontSize} mode={mode} />
       <TabBar
         tabs={tabs}
         activeTabId={activeTabId}
@@ -195,14 +199,18 @@ function App() {
           onClose={() => { setFindState(s => ({ ...s, open: false })); focusEditor() }}
         />
       )}
-      <Editor
-        ref={editorRef}
-        tabId={activeTabId}
-        content={activeTab?.content ?? ''}
-        fontSize={fontSize}
-        onChange={content => updateContent(activeTabId, content)}
-        onCursorChange={setCursor}
-      />
+      {mode === 'edit' ? (
+        <Editor
+          ref={editorRef}
+          tabId={activeTabId}
+          content={activeTab?.content ?? ''}
+          fontSize={fontSize}
+          onChange={content => updateContent(activeTabId, content)}
+          onCursorChange={setCursor}
+        />
+      ) : (
+        <Preview content={activeTab?.content ?? ''} fontSize={fontSize} />
+      )}
       <Footer cursor={cursor} />
     </div>
   )
