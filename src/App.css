@@ -26,6 +26,7 @@
   border-bottom: 1px solid var(--tab-border);
   flex-shrink: 0;
   user-select: none;
+  position: relative;
 }
 
 .toolbar__menus {
@@ -320,6 +321,27 @@
 
 .tb-btn--mode-active {
   background: #d0d0d0;
+}
+
+/* ── Format group: centrado en el toolbar ── */
+.toolbar__format {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 4px;
+  pointer-events: auto;
+}
+
+.toolbar__format .tb-btn {
+  font-size: 13px;
+  min-width: 26px;
+  height: 24px;
+  padding: 2px 6px;
 }
 
 /* ── Format group disabled in read mode ── */
