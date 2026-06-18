@@ -1,6 +1,6 @@
 import { useEffect, useRef, forwardRef, useImperativeHandle } from 'react'
 import { EditorView, keymap } from '@codemirror/view'
-import { EditorState } from '@codemirror/state'
+import { EditorState, Compartment } from '@codemirror/state'
 import { defaultKeymap, history, historyKeymap, selectAll } from '@codemirror/commands'
 
 // Remove Ctrl+A (Mod-a) from defaultKeymap — our app uses it for Open
@@ -18,7 +18,9 @@ const editorTheme = EditorView.theme({
   '.cm-line': { padding: 0 },
 })
 
-const Editor = forwardRef(function Editor({ tabId, content, onChange, onCursorChange, fontSize = 14 }, ref) {
+const wrapCompartment = new Compartment()
+
+const Editor = forwardRef(function Editor({ tabId, content, onChange, onCursorChange, fontSize = 14, font = 'Consolas', wordWrap = true }, ref) {
   const containerRef = useRef(null)
   const viewRef = useRef(null)
   const onChangeRef = useRef(onChange)
@@ -29,15 +31,14 @@ const Editor = forwardRef(function Editor({ tabId, content, onChange, onCursorCh
 
   useImperativeHandle(ref, () => ({
     getView: () => viewRef.current,
-    setContent: (content) => {
+    setContent: (text) => {
       const view = viewRef.current
       if (!view) return
-      view.dispatch({
-        changes: { from: 0, to: view.state.doc.length, insert: content },
-      })
+      view.dispatch({ changes: { from: 0, to: view.state.doc.length, insert: text } })
     },
   }))
 
+  // Create / destroy editor when tab changes
   useEffect(() => {
     const view = new EditorView({
       state: EditorState.create({
@@ -46,6 +47,7 @@ const Editor = forwardRef(function Editor({ tabId, content, onChange, onCursorCh
           history(),
           editorKeymap,
           editorTheme,
+          wrapCompartment.of(wordWrap ? EditorView.lineWrapping : []),
           EditorView.updateListener.of(update => {
             if (update.docChanged) {
               onChangeRef.current(update.state.doc.toString())
@@ -70,11 +72,18 @@ const Editor = forwardRef(function Editor({ tabId, content, onChange, onCursorCh
     return () => { view.destroy(); viewRef.current = null }
   }, [tabId]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Reconfigure word wrap without destroying the view
+  useEffect(() => {
+    const view = viewRef.current
+    if (!view) return
+    view.dispatch({ effects: wrapCompartment.reconfigure(wordWrap ? EditorView.lineWrapping : []) })
+  }, [wordWrap])
+
   return (
     <div
       ref={containerRef}
       className="editor-container"
-      style={{ fontFamily: 'Consolas, monospace', fontSize: `${fontSize}px` }}
+      style={{ fontFamily: `${font}, monospace`, fontSize: `${fontSize}px` }}
     />
   )
 })

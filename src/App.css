@@ -47,6 +47,13 @@
   padding: 0 4px;
 }
 
+.toolbar__right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+}
+
 .toolbar__zoom-label {
   font-size: 11px;
   color: var(--muted);
@@ -72,6 +79,7 @@
 }
 
 .tb-btn:hover { background: #d8d8d8; }
+.tb-btn--active { background: #d0d0d0; }
 
 .menu-root {
   position: relative;
@@ -398,3 +406,171 @@
 
 .preview-container th { background: #f0f0f0; font-weight: 600; }
 .preview-container tr:nth-child(even) td { background: #f8f8f8; }
+
+/* ── Settings overlay + panel ── */
+.settings-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+}
+
+.settings-panel {
+  position: absolute;
+  top: 28px;
+  right: 0;
+  width: 260px;
+  background: #fff;
+  border: 1px solid #bbb;
+  box-shadow: -2px 4px 12px rgba(0,0,0,.15);
+  padding: 0;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  font-weight: 600;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.settings-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #666;
+  line-height: 1;
+  padding: 0 4px;
+  border-radius: 2px;
+}
+
+.settings-close:hover { background: #e0e0e0; }
+
+.settings-section {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.settings-section:last-child { border-bottom: none; }
+
+.settings-label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  font-size: 12px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.settings-options {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.settings-radio {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.settings-select {
+  width: 100%;
+  padding: 4px 6px;
+  border: 1px solid #bbb;
+  border-radius: 2px;
+  font-size: 13px;
+  background: #fff;
+  color: var(--text);
+}
+
+.settings-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+/* ── Dark theme ── */
+[data-theme="dark"] {
+  --tab-bg: #2d2d2d;
+  --tab-active-bg: #1e1e1e;
+  --tab-border: #444;
+  --toolbar-bg: #2d2d2d;
+  --text: #d4d4d4;
+  --muted: #888;
+}
+
+[data-theme="dark"] .menu-dropdown,
+[data-theme="dark"] .settings-panel {
+  background: #2d2d2d;
+  border-color: #444;
+  color: #d4d4d4;
+}
+
+[data-theme="dark"] .menu-item:hover { background: #3a3a4a; }
+[data-theme="dark"] .tb-btn:hover,
+[data-theme="dark"] .menu-btn:hover,
+[data-theme="dark"] .menu-btn--open { background: #3a3a3a; }
+
+[data-theme="dark"] .preview-container { background: #1e1e1e; color: #d4d4d4; }
+[data-theme="dark"] .preview-container code,
+[data-theme="dark"] .preview-container pre { background: #2d2d2d; border-color: #444; }
+[data-theme="dark"] .preview-container th { background: #2d2d2d; }
+[data-theme="dark"] .preview-container tr:nth-child(even) td { background: #252525; }
+[data-theme="dark"] .preview-container h1,
+[data-theme="dark"] .preview-container h2 { border-bottom-color: #444; }
+
+[data-theme="dark"] .editor-container .cm-editor { background: #1e1e1e; color: #d4d4d4; }
+[data-theme="dark"] .editor-container { background: #1e1e1e; }
+
+[data-theme="dark"] .settings-header { border-bottom-color: #444; }
+[data-theme="dark"] .settings-section { border-bottom-color: #3a3a3a; }
+[data-theme="dark"] .settings-label { color: #999; }
+[data-theme="dark"] .settings-select { background: #2d2d2d; border-color: #555; color: #d4d4d4; }
+[data-theme="dark"] .settings-close:hover { background: #444; }
+
+/* ── System dark (when theme = 'system') ── */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --tab-bg: #2d2d2d;
+    --tab-active-bg: #1e1e1e;
+    --tab-border: #444;
+    --toolbar-bg: #2d2d2d;
+    --text: #d4d4d4;
+    --muted: #888;
+  }
+
+  :root:not([data-theme="light"]) .menu-dropdown,
+  :root:not([data-theme="light"]) .settings-panel {
+    background: #2d2d2d;
+    border-color: #444;
+    color: #d4d4d4;
+  }
+
+  :root:not([data-theme="light"]) .menu-item:hover { background: #3a3a4a; }
+  :root:not([data-theme="light"]) .tb-btn:hover,
+  :root:not([data-theme="light"]) .menu-btn:hover,
+  :root:not([data-theme="light"]) .menu-btn--open { background: #3a3a3a; }
+
+  :root:not([data-theme="light"]) .preview-container { background: #1e1e1e; color: #d4d4d4; }
+  :root:not([data-theme="light"]) .preview-container code,
+  :root:not([data-theme="light"]) .preview-container pre { background: #2d2d2d; border-color: #444; }
+  :root:not([data-theme="light"]) .preview-container th { background: #2d2d2d; }
+  :root:not([data-theme="light"]) .preview-container tr:nth-child(even) td { background: #252525; }
+  :root:not([data-theme="light"]) .preview-container h1,
+  :root:not([data-theme="light"]) .preview-container h2 { border-bottom-color: #444; }
+
+  :root:not([data-theme="light"]) .editor-container .cm-editor { background: #1e1e1e; color: #d4d4d4; }
+  :root:not([data-theme="light"]) .editor-container { background: #1e1e1e; }
+
+  :root:not([data-theme="light"]) .settings-header { border-bottom-color: #444; }
+  :root:not([data-theme="light"]) .settings-section { border-bottom-color: #3a3a3a; }
+  :root:not([data-theme="light"]) .settings-label { color: #999; }
+  :root:not([data-theme="light"]) .settings-select { background: #2d2d2d; border-color: #555; color: #d4d4d4; }
+  :root:not([data-theme="light"]) .settings-close:hover { background: #444; }
+}
