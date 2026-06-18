@@ -62,7 +62,7 @@ function Menu({ items, onAction, onClose }) {
   )
 }
 
-function Toolbar({ onAction, fontSize, mode = 'edit' }) {
+function Toolbar({ onAction, fontSize, mode = 'edit', settingsOpen = false }) {
   const [openMenu, setOpenMenu] = useState(null)
   const ref = useRef(null)
   const isRead = mode === 'read'
@@ -135,6 +135,17 @@ function Toolbar({ onAction, fontSize, mode = 'edit' }) {
             {btn.label}
           </button>
         ))}
+      </div>
+
+      {/* ── Settings button (right) ── */}
+      <div className="toolbar__right">
+        <button
+          className={`tb-btn${settingsOpen ? ' tb-btn--active' : ''}`}
+          title="Settings"
+          onClick={() => onAction('settings')}
+        >
+          ⚙
+        </button>
       </div>
 
     </div>

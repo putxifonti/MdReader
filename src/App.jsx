@@ -2,11 +2,13 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { undo, deleteCharForward } from '@codemirror/commands'
 import { applyFormat } from './utils/format'
 import { useTabs } from './hooks/useTabs'
+import { useSettings } from './hooks/useSettings'
 import Toolbar from './components/Toolbar'
 import TabBar from './components/TabBar'
 import FindReplace from './components/FindReplace'
 import Editor from './components/Editor'
 import Preview from './components/Preview'
+import Settings from './components/Settings'
 import Footer from './components/Footer'
 import './App.css'
 
@@ -16,10 +18,12 @@ function basename(filePath) {
 
 function App() {
   const { tabs, activeTabId, activeTab, setActiveTabId, addTab, updateContent, updateTab, closeTab } = useTabs()
+  const { settings, updateSetting } = useSettings()
   const [cursor, setCursor] = useState({ line: 1, col: 1, chars: 0 })
   const [findState, setFindState] = useState({ open: false, mode: 'find' })
   const [fontSize, setFontSize] = useState(14)
   const [mode, setMode] = useState('edit')
+  const [settingsOpen, setSettingsOpen] = useState(false)
   const editorRef = useRef(null)
 
   function getView() { return editorRef.current?.getView() }
@@ -28,6 +32,19 @@ function App() {
   function focusEditor() {
     setTimeout(() => editorRef.current?.getView()?.focus(), 100)
   }
+
+  // ── Theme ───────────────────────────────────────────────────────
+
+  useEffect(() => {
+    const root = document.documentElement
+    if (settings.theme === 'dark') {
+      root.setAttribute('data-theme', 'dark')
+    } else if (settings.theme === 'light') {
+      root.setAttribute('data-theme', 'light')
+    } else {
+      root.removeAttribute('data-theme')
+    }
+  }, [settings.theme])
 
   // ── File operations ─────────────────────────────────────────────
 
@@ -129,6 +146,7 @@ function App() {
       case 'find':         setFindState({ open: true, mode: 'find' }); break
       case 'replace':      setFindState({ open: true, mode: 'replace' }); break
       case 'toggle-mode':  setMode(m => m === 'edit' ? 'read' : 'edit'); break
+      case 'settings':     setSettingsOpen(s => !s); break
       case 'zoom-in':      setFontSize(s => Math.min(32, s + 2)); break
       case 'zoom-out':     setFontSize(s => Math.max(10, s - 2)); break
       case 'bold': case 'italic': case 'strikethrough':
@@ -184,7 +202,7 @@ function App() {
 
   return (
     <div className="app">
-      <Toolbar onAction={handleAction} fontSize={fontSize} mode={mode} />
+      <Toolbar onAction={handleAction} fontSize={fontSize} mode={mode} settingsOpen={settingsOpen} />
       <TabBar
         tabs={tabs}
         activeTabId={activeTabId}
@@ -205,11 +223,20 @@ function App() {
           tabId={activeTabId}
           content={activeTab?.content ?? ''}
           fontSize={fontSize}
+          font={settings.font}
+          wordWrap={settings.wordWrap}
           onChange={content => updateContent(activeTabId, content)}
           onCursorChange={setCursor}
         />
       ) : (
         <Preview content={activeTab?.content ?? ''} fontSize={fontSize} />
+      )}
+      {settingsOpen && (
+        <Settings
+          settings={settings}
+          onUpdate={updateSetting}
+          onClose={() => setSettingsOpen(false)}
+        />
       )}
       <Footer cursor={cursor} />
     </div>
