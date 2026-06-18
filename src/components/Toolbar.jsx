@@ -108,7 +108,19 @@ function Toolbar({ onAction, fontSize, mode = 'edit', settingsOpen = false }) {
           title={isRead ? 'Switch to Edit mode (Ctrl+Shift+P)' : 'Switch to Read mode (Ctrl+Shift+P)'}
           onClick={() => onAction('toggle-mode')}
         >
-          {isRead ? '✏️' : '👁'}
+          {isRead ? (
+            // Pencil icon — edit mode
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M11.5 2.5 L13.5 4.5 L5 13 L2 14 L3 11 Z" />
+              <line x1="9.5" y1="4.5" x2="11.5" y2="6.5" />
+            </svg>
+          ) : (
+            // Eye icon — read mode
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M1 8 C4 3, 12 3, 15 8 C12 13, 4 13, 1 8 Z" />
+              <circle cx="8" cy="8" r="2.5" />
+            </svg>
+          )}
         </button>
       </div>
 
