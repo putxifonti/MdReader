@@ -30,7 +30,7 @@ const EDIT_MENU = [
 const FORMAT_BUTTONS = [
   { label: 'B',   action: 'bold',          title: 'Bold (Ctrl+Shift+B)',    style: { fontWeight: 'bold' } },
   { label: 'I',   action: 'italic',        title: 'Italic (Ctrl+Shift+I)',  style: { fontStyle: 'italic' } },
-  { label: '~~',  action: 'strikethrough', title: 'Strikethrough',          style: { textDecoration: 'line-through' } },
+  { label: <span style={{ textDecoration: 'line-through', fontWeight: '600' }}>S</span>, action: 'strikethrough', title: 'Strikethrough' },
   { label: 'H1',  action: 'h1',            title: 'Heading 1' },
   { label: 'H2',  action: 'h2',            title: 'Heading 2' },
   { label: 'H3',  action: 'h3',            title: 'Heading 3' },
@@ -99,6 +99,8 @@ function Toolbar({ onAction, fontSize, mode = 'edit', settingsOpen = false }) {
         </div>
       </div>
 
+      <div className="toolbar__sep" />
+
       {/* ── Read / Edit toggle ── */}
       <div className="toolbar__group">
         <button
@@ -106,7 +108,7 @@ function Toolbar({ onAction, fontSize, mode = 'edit', settingsOpen = false }) {
           title={isRead ? 'Switch to Edit mode (Ctrl+Shift+P)' : 'Switch to Read mode (Ctrl+Shift+P)'}
           onClick={() => onAction('toggle-mode')}
         >
-          {isRead ? 'Edit' : 'Read'}
+          {isRead ? '✏️' : '👁'}
         </button>
       </div>
 
@@ -122,7 +124,7 @@ function Toolbar({ onAction, fontSize, mode = 'edit', settingsOpen = false }) {
       <div className="toolbar__sep" />
 
       {/* ── Format buttons ── */}
-      <div className={`toolbar__group${isRead ? ' toolbar__group--disabled' : ''}`}>
+      <div className={`toolbar__group toolbar__format${isRead ? ' toolbar__group--disabled' : ''}`}>
         {FORMAT_BUTTONS.map(btn => (
           <button
             key={btn.action}
