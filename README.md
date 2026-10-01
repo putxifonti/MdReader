@@ -2,6 +2,8 @@
 
 A minimalist text editor for Windows, inspired by Notepad, with built-in Markdown preview. Write plain text or Markdown, keep multiple files open in tabs, and switch between editing and reading without leaving the app.
 
+[Download](#download) · [Getting started](#getting-started) · [Screenshots](#screenshots) · [Features](#features) · [Keyboard shortcuts](#keyboard-shortcuts) · [Development](#development)
+
 ---
 
 ## Download
@@ -21,7 +23,45 @@ Download and extract the ZIP, then choose how you want to run MdReader:
 3. Press `Ctrl+Shift+P` to switch between **Edit** and **Read** modes.
 4. Save with `Ctrl+G`, and use the settings button to adjust your theme, font, and word wrap.
 
+### Try it out
+
+Paste this into a new tab, then press `Ctrl+Shift+P` to preview it:
+
+```markdown
+# My notes
+
+A simple note with **bold text**, *italics*, and `inline code`.
+
+- Write an idea
+- Add a few details
+- Save it for later
+
+[Visit MdReader on GitHub](https://github.com/putxifonti/MdReader)
+```
+
+Formatting buttons insert Markdown into your document; they do not change the underlying file format.
+
 ---
+
+## Screenshots
+
+### Edit mode
+
+Write and edit Markdown with the formatting toolbar, shown here in the dark theme.
+
+![MdReader in Edit mode with the dark theme](md-reader-edit-dark.png)
+
+### Read mode
+
+Switch to a formatted preview of your document with `Ctrl+Shift+P`.
+
+![MdReader in Read mode with the dark theme](md-reader-view-dark.png)
+
+---
+
+## Why MdReader?
+
+I created MdReader because I was tired of reading Markdown files as plain text, without seeing their formatting. I wanted something as simple as Notepad, but with an easy way to read Markdown the way it was meant to look—and edit it in the same app.
 
 ## Features
 
@@ -110,6 +150,12 @@ npm run dist
 ```
 
 Both executables are written to `dist-electron/`.
+
+## Feedback
+
+Found a bug or have a suggestion? [Open an issue](https://github.com/putxifonti/MdReader/issues).
+
+For bug reports, include your Windows version, MdReader version, steps to reproduce, and what you expected to happen. Screenshots or a small sample document can help—please remove any private information first.
 
 ---
 
